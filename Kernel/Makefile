@@ -1,10 +1,17 @@
 GCC = mips64r5900el-ps2-elf-gcc
+GCCFLAGS = -ffreestanding -mabi=eabi -O1 
+#32 relocation error
+#o64 relocation error
+#n32 broken addressing
+#64 broken addressing
+#eabi relocation error
+#eabi + -mgp32 relocation error
 LD = mips64r5900el-ps2-elf-ld
 all:
-	$(GCC) -ffreestanding -c -o bootstrap.o bootstrap.S -O2
-	$(GCC) -ffreestanding -c -o kernelmain.o kernelmain.c -O2
-	$(GCC) -ffreestanding -c -o stdout.o stdout.c -O2
-	$(LD) -T linker.ld --oformat binary
+	$(GCC) -c -o bootstrap.o bootstrap.S $(GCCFLAGS)
+	$(GCC) -c -o kernelmain.o kernelmain.c $(GCCFLAGS)
+	$(GCC) -c -o stdout.o stdout.c $(GCCFLAGS)
+	$(LD) -T linker.ld --oformat binary 
 
 clean:
 	rm -f bootstrap.o
