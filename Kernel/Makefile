@@ -1,21 +1,27 @@
+AS = mips64r5900el-ps2-elf-as 
 GCC = mips64r5900el-ps2-elf-gcc
-GCCFLAGS = -ffreestanding -mabi=eabi -O1 
-#32 relocation error
-#o64 relocation error
-#n32 broken addressing
-#64 broken addressing
-#eabi relocation error
-#eabi + -mgp32 relocation error
+# using n32 results in a problem with loading the HI part of an address
+ASFLAGS = -mabi=eabi
+
 LD = mips64r5900el-ps2-elf-ld
+
 all:
-	$(GCC) -c -o bootstrap.o bootstrap.S $(GCCFLAGS)
-	$(GCC) -c -o kernelmain.o kernelmain.c $(GCCFLAGS)
-	$(GCC) -c -o stdout.o stdout.c $(GCCFLAGS)
-	$(LD) -T linker.ld --oformat binary 
+	$(AS) -o bootstrap.o bootstrap.S $(ASFLAGS)
+	$(AS) -o stdout.o stdout.S $(ASFLAGS)
+	$(GCC) -o stdout_c.o stdout_c.c -mabi=eabi -ffreestanding -c
+	$(AS) -o kernelmain.o kernelmain.S $(ASFLAGS)
+	$(AS) -o exceptions.o exceptions/exceptions.S $(ASFLAGS)
+	$(AS) -o syscalls.o exceptions/syscalls.S $(ASFLAGS)
+	$(LD) -T linker.ld
+	python tools/sizeof.py kernel.bin
 
 clean:
 	rm -f bootstrap.o
 	rm -f kernelmain.o
 	rm -f stdout.o
 	rm -f kernel.bin
+	rm -f stdout_c.o
+	rm -f exceptions/exceptions.o
+	rm -f exceptions/syscalls.o
+
 

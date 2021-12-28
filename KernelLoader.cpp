@@ -14,10 +14,9 @@ int main(int argc, char **argv)
 	{
 		*(unsigned char *)(0x80001000 + i) = kernelbin[i];
 	}
-	
-	printf("Going to jump to the kernel now.\n");
+
+	printf("Here we go!\n");
 
 	asm("j %0":: "r"(0x80001000));
-	
 SleepThread();
 }
