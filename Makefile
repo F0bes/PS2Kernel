@@ -17,7 +17,7 @@ run: $(EE_BIN)
 	ps2client execee host:$(EE_BIN)
 
 emu: $(EE_BIN)
-	~/PCSX2/bin/PCSX2 --elf="$(shell pwd)/$(EE_BIN)"
+	~/PCSX2/bin/pcsx2 --elf="$(shell pwd)/$(EE_BIN)"
 
 reset:
 	ps2client reset

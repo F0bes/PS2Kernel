@@ -102,8 +102,9 @@ lw $a2, 8($sp)
 lw $a3, 12($sp)
 jalr $t0 # Jump to the syscall handler
 
-lw $ra, 20($sp) # Restore the return address
+lw $ra, 16($sp) # Restore the return address
 add $sp, $sp, 24
+
 j EXCEPTION_GENERIC_PRE_END # This handles our exit jump
 
 _syscall_invalid:

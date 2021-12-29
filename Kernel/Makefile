@@ -9,15 +9,17 @@ all:
 	$(AS) -o bootstrap.o bootstrap.S $(ASFLAGS)
 	$(AS) -o stdout.o stdout.S $(ASFLAGS)
 	$(GCC) -o stdout_c.o stdout_c.c -mabi=eabi -ffreestanding -c
-	$(AS) -o kernelmain.o kernelmain.S $(ASFLAGS)
-	$(AS) -o exceptions.o exceptions/exceptions.S $(ASFLAGS)
-	$(AS) -o syscalls.o exceptions/syscalls.S $(ASFLAGS)
+	$(AS) -o startkernel.o startkernel.S $(ASFLAGS)
+	$(GCC) -o kernel.o kernel.c -mabi=eabi -ffreestanding -c
+	$(AS) -o exceptions/exceptions.o exceptions/exceptions.S $(ASFLAGS)
+	$(AS) -o exceptions/syscalls.o exceptions/syscalls.S $(ASFLAGS)
 	$(LD) -T linker.ld
 	python tools/sizeof.py kernel.bin
 
 clean:
 	rm -f bootstrap.o
-	rm -f kernelmain.o
+	rm -f startkernel.o
+	rm -f kernel.o
 	rm -f stdout.o
 	rm -f kernel.bin
 	rm -f stdout_c.o

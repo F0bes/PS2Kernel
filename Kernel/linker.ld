@@ -1,9 +1,10 @@
 INPUT(
-	kernelmain.o
-	stdout.o
-	stdout_c.o
-	exceptions.o
-  syscalls.o
+  startkernel.o
+  kernel.o
+  stdout.o
+  stdout_c.o
+  exceptions/exceptions.o
+  exceptions/syscalls.o
 )
 
 SECTIONS
@@ -12,13 +13,13 @@ SECTIONS
     bootstrap.o( .text )
   }
 
-  .text : ALIGN(0x1000) {
+  .text : ALIGN(0x250) {
 _TEXT_START_ = .;
     *(.text)
 _TEXT_END_ = .;
   }
 
-  .data : ALIGN(0x1000) {
+  .data : ALIGN(0x100) {
 _DATA_START_ = .;
     *(.data)
 _DATA_END_ = .;
